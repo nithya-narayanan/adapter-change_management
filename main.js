@@ -116,7 +116,7 @@ healthcheck(callback) {
       */
       this.emitOffline();
       log.error('The ServiceNow Instance '+this.id+' is unavailable.');
-      callback(result, error);
+      this.callback(result, error);
    } else {
      /**
       * Write this block.
@@ -130,7 +130,7 @@ healthcheck(callback) {
       */
       this.emitOnline();
       log.debug('The ServiceNow Instance '+this.id+' is ONLINE.');
-      callback(result);
+      this.callback(result);
    }
  });
 }
