@@ -33,13 +33,7 @@ class ServiceNowAdapter extends EventEmitter {
    * @param {(object|string)} responseData - The entire REST API response.
    * @param {error} [errorMessage] - An error thrown by REST API call.
    */
-   callback(data, error){
-       if(error){
-            log.error('Message from Callback: The ServiceNow Instance '+this.id+' is unavailable.');
-       }else{
-            log.debug('Message from Callback: The ServiceNow Instance '+this.id+' is ONLINE.');
-       }
-   }
+
 
   /**
    * Here we document the adapter properties.
@@ -123,7 +117,7 @@ healthcheck(callback) {
       */
       this.emitOffline();
       log.error('The ServiceNow Instance '+this.id+' is unavailable.');
-      this.callback(result, error);
+      return callback(result, error);
       
    } else {
      /**
@@ -138,7 +132,7 @@ healthcheck(callback) {
       */
       this.emitOnline();
       log.debug('The ServiceNow Instance '+this.id+' is ONLINE.');
-      this.callback(result);
+      return callback(result);
    }
  });
 }
