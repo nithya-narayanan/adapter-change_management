@@ -115,10 +115,7 @@ healthcheck(callback) {
       * healthcheck(), execute it passing the error seen as an argument
       * for the callback's errorMessage parameter.
       */
-      this.emitOffline();
-      log.error('The ServiceNow Instance '+this.id+' is unavailable.');
-      return callback(result, error);
-      
+      this.emitOffline((results,error) => callback(results,error));            
    } else {
      /**
       * Write this block.
@@ -130,9 +127,7 @@ healthcheck(callback) {
       * parameter as an argument for the callback function's
       * responseData parameter.
       */
-      this.emitOnline();
-      log.debug('The ServiceNow Instance '+this.id+' is ONLINE.');
-      return callback(result);
+      this.emitOnline((results,error) => callback(results,error));     
    }
  });
 }
@@ -146,7 +141,7 @@ healthcheck(callback) {
    */
   emitOffline() {
     this.emitStatus('OFFLINE');
-    log.warn('ServiceNow: Instance is unavailable.');
+    log.warn('ServiceNow: '+this.id+' Instance is unavailable.');
   }
 
   /**
@@ -158,7 +153,7 @@ healthcheck(callback) {
    */
   emitOnline() {
     this.emitStatus('ONLINE');
-    log.info('ServiceNow: Instance is available.');
+    log.info('ServiceNow: Instance '+this.id+' is available.');
   }
 
   /**
