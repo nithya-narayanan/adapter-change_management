@@ -185,18 +185,7 @@ healthcheck(callback) {
      * Note how the object was instantiated in the constructor().
      * get() takes a callback function.
      */
-    let result = this.connector.get(callback);
-    if(result!==null && typeof (result === 'object') && ('body' in result) ){
-        let bodyJson = JSON.parse(result["body"]);
-        for(var element in bodyjson["result"]){
-            log.debug('found an element');
-            // if(){
-
-            // }else{
-
-            // }
-        }
-    }
+     this.connector.get(callback);
   }
 
   /**
