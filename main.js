@@ -187,9 +187,10 @@ class ServiceNowAdapter extends EventEmitter {
          * get() takes a callback function.
          */
         let response = this.connector.get(callback);
+        var result = null;
         if (response && response !== null && typeof (response === 'object') && ('body' in response)) {
 
-            var result = response.body.result;
+             result = response.body.result;
 
             for (var j = 0; j < result.length; j++) {
                 for (var key in result[j]) {
@@ -229,7 +230,29 @@ class ServiceNowAdapter extends EventEmitter {
          * Note how the object was instantiated in the constructor().
          * post() takes a callback function.
          */
-        this.connector.post(callback);
+        let response = this.connector.post(callback);
+        var result = null;
+        if (response && response !== null && typeof (response === 'object') && ('body' in response)) {
+            
+            result = response.body.result;
+            
+            for (var key in result) {
+                    if (result.hasOwnProperty(key)) {
+                        if (key === 'number'){
+                            result.change_ticket_number = result.number;
+                            delete result[j].number;
+                        }else if(key === 'sys_id'){
+                            result.change_ticket_key = result.sys_id;
+                            delete result.sys_id;
+                        }else if( key === 'active' || key === 'priority' || key === 'description' || key === 'work_start' || key === 'work_end') {
+                            continue;
+                        } else {
+                            delete result[key];
+                        }
+                    }
+                }
+        }
+        return result;
     }
 }
 
