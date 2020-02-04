@@ -115,7 +115,9 @@ class ServiceNowAdapter extends EventEmitter {
                  * healthcheck(), execute it passing the error seen as an argument
                  * for the callback's errorMessage parameter.
                  */
-                this.emitOffline((result, error) => callback(result, error));
+
+                 log.error('ServiceNow: ' + this.id + ' Instance is unavailable.');        
+                 this.emitOffline((result, error) => callback(result, error));
             } else {
                 /**
                  * Write this block.
@@ -127,9 +129,10 @@ class ServiceNowAdapter extends EventEmitter {
                  * parameter as an argument for the callback function's
                  * responseData parameter.
                  */
+                log.debug('ServiceNow: Instance ' + this.id + ' is available.');
                 this.emitOnline((result, error) => callback(result, error));
-            }
-        });
+            }            
+        });        
     }
 
     /**
@@ -139,9 +142,8 @@ class ServiceNowAdapter extends EventEmitter {
      * @description Emits an OFFLINE event to IAP indicating the external
      *   system is not available.
      */
-    emitOffline() {
+    emitOffline(callback) {
         this.emitStatus('OFFLINE');
-        log.warn('ServiceNow: ' + this.id + ' Instance is unavailable.');
     }
 
     /**
@@ -151,9 +153,8 @@ class ServiceNowAdapter extends EventEmitter {
      * @description Emits an ONLINE event to IAP indicating external
      *   system is available.
      */
-    emitOnline() {
-        this.emitStatus('ONLINE');
-        log.info('ServiceNow: Instance ' + this.id + ' is available.');
+    emitOnline(callback) {
+        this.emitStatus('ONLINE');        
     }
 
     /**
@@ -186,7 +187,7 @@ class ServiceNowAdapter extends EventEmitter {
          * get() takes a callback function.
          */
         let response = this.connector.get(callback);
-        if (response !== null && typeof (response === 'object') && ('body' in response)) {
+        if (response && response !== null && typeof (response === 'object') && ('body' in response)) {
 
             var result = response.body.result;
 
