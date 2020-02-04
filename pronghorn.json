@@ -45,14 +45,14 @@
                 "schema": {
                     "title": "changeTicket",
                     "$ref": "changeRequest#/definitions/changeTicket"
-                },
-                "roles": [
+                }
+            },
+            "roles": [
                     "admin",
                     "engineer",
                     "operator"
                 ],
-                "task": true
-            }
+            "task": true            
         }
     ]
 }
