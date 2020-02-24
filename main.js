@@ -228,8 +228,8 @@ class ServiceNowAdapter extends EventEmitter {
 
                 }
 
-                log.info('8***************The result returned is *****************');
-                log.info(JSON.stringify(result));
+                // log.info('8***************The result returned is *****************');
+                // log.info(JSON.stringify(result));
                 callBackData = result;
             }
             callback(callBackData, callbackError);
@@ -305,8 +305,8 @@ class ServiceNowAdapter extends EventEmitter {
                         }
                     }
                 }
-                 log.info('9***************The post result returned is *****************');
-                 log.info(JSON.stringify(result));
+                //  log.info('9***************The post result returned is *****************');
+                //  log.info(JSON.stringify(result));
                 callBackData = result;
             }
             callback(callBackData, callBackError);

@@ -57,7 +57,7 @@ class ServiceNowConnector {
    * @param {error} callback.error - The error property of callback.
    */
   get(callback) {
-      log.info('**************inside connectors get');
+    //   log.info('**************inside connectors get');
     let getCallOptions = this.options;
     getCallOptions.method = 'GET';
     getCallOptions.query = 'sysparm_limit=1';
