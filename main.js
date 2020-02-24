@@ -211,6 +211,8 @@ class ServiceNowAdapter extends EventEmitter {
             }
         }
 
+        log.info('***************The result is *****************');
+        log.info(result);
         return result;
     }
 
