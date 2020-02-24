@@ -188,6 +188,8 @@ class ServiceNowAdapter extends EventEmitter {
          */
         this.connector.get((response, error) => {
 
+            let callbackError = error;
+            let callBackData = response;
             if (!error) {
 
                 //  log.info('2***************No error*****************');
@@ -201,10 +203,10 @@ class ServiceNowAdapter extends EventEmitter {
                     // log.info('5***********' + JSON.stringify(body));
                     result = body.result;
                     // log.info('6***********' + result);
-                    log.info('7***********' + JSON.stringify(result));
+                    // log.info('7***********' + JSON.stringify(result));
                     if (result != null) {
-                                log.info('1***************The result length is *****************');
-                                log.info(result.length);
+                                // log.info('1***************The result length is *****************');
+                                // log.info(result.length);
                         for (var j = 0; j < result.length; j++) {
                             for (var key in result[j]) {
                                 if (result[j].hasOwnProperty(key)) {
@@ -228,8 +230,9 @@ class ServiceNowAdapter extends EventEmitter {
 
                  log.info('8***************The result returned is *****************');
                  log.info(JSON.stringify(result));
-                return result;
+                 callBackData = result;
             }
+            callback(callBackData, callbackError);
         });
     }
 
