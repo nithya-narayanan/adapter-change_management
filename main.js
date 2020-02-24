@@ -191,7 +191,9 @@ class ServiceNowAdapter extends EventEmitter {
         if (response && response !== null && typeof (response === 'object') && ('body' in response)) {
 
              result = response.body.result;
-
+            log.info('1***************The result is *****************');
+            log.info(result);
+            
             for (var j = 0; j < result.length; j++) {
                 for (var key in result[j]) {
                     if (result[j].hasOwnProperty(key)) {
