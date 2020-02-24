@@ -292,7 +292,7 @@ class ServiceNowAdapter extends EventEmitter {
                             if (result.hasOwnProperty(key)) {
                                 if (key === 'number') {
                                     result.change_ticket_number = result.number;
-                                    delete result[j].number;
+                                    delete result.number;
                                 } else if (key === 'sys_id') {
                                     result.change_ticket_key = result.sys_id;
                                     delete result.sys_id;
@@ -309,7 +309,7 @@ class ServiceNowAdapter extends EventEmitter {
                  log.info(JSON.stringify(result));
                 callBackData = result;
             }
-            callback(callBackData, callbackError);
+            callback(callBackData, callBackError);
         });
 
     }
