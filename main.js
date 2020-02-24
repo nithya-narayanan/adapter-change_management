@@ -116,8 +116,8 @@ class ServiceNowAdapter extends EventEmitter {
                  * for the callback's errorMessage parameter.
                  */
 
-                 log.error('ServiceNow: ' + this.id + ' Instance is unavailable.');        
-                 this.emitOffline((result, error) => callback(result, error));
+                log.error('ServiceNow: ' + this.id + ' Instance is unavailable.');
+                this.emitOffline((result, error) => callback(result, error));
             } else {
                 /**
                  * Write this block.
@@ -131,8 +131,8 @@ class ServiceNowAdapter extends EventEmitter {
                  */
                 log.debug('ServiceNow: Instance ' + this.id + ' is available.');
                 this.emitOnline((result, error) => callback(result, error));
-            }            
-        });        
+            }
+        });
     }
 
     /**
@@ -154,7 +154,7 @@ class ServiceNowAdapter extends EventEmitter {
      *   system is available.
      */
     emitOnline(callback) {
-        this.emitStatus('ONLINE');        
+        this.emitStatus('ONLINE');
     }
 
     /**
@@ -186,36 +186,45 @@ class ServiceNowAdapter extends EventEmitter {
          * Note how the object was instantiated in the constructor().
          * get() takes a callback function.
          */
-        let response = this.connector.get(callback);
-        var result = null;
-        if (response && response !== null && typeof (response === 'object') && ('body' in response)) {
+        this.connector.get((response, error) => {
 
-             result = response.body.result;
-            log.info('1***************The result is *****************');
-            log.info(result);
-            
-            for (var j = 0; j < result.length; j++) {
-                for (var key in result[j]) {
-                    if (result[j].hasOwnProperty(key)) {
-                        if (key === 'number'){
-                            result[j].change_ticket_number = result[j].number;
-                            delete result[j].number;
-                        }else if(key === 'sys_id'){
-                            result[j].change_ticket_key = result[j].sys_id;
-                            delete result[j].sys_id;
-                        }else if( key === 'active' || key === 'priority' || key === 'description' || key === 'work_start' || key === 'work_end') {
-                            continue;
-                        } else {
-                            delete result[j][key];
+            if (!error) {
+
+                // log.info('2***************The response is *****************');
+                // log.info(response);
+                var result = null;
+                if (response && response !== null && typeof (response === 'object') && ('body' in response)) {
+
+                    result = response.body.result;
+
+                    if (result != null) {
+                                log.info('1***************The result is *****************');
+                                log.info(result.length);
+                        for (var j = 0; j < result.length; j++) {
+                            for (var key in result[j]) {
+                                if (result[j].hasOwnProperty(key)) {
+                                    if (key === 'number') {
+                                        result[j].change_ticket_number = result[j].number;
+                                        delete result[j].number;
+                                    } else if (key === 'sys_id') {
+                                        result[j].change_ticket_key = result[j].sys_id;
+                                        delete result[j].sys_id;
+                                    } else if (key === 'active' || key === 'priority' || key === 'description' || key === 'work_start' || key === 'work_end') {
+                                        continue;
+                                    } else {
+                                        delete result[j][key];
+                                    }
+                                }
+                            }
                         }
                     }
                 }
-            }
-        }
 
-        log.info('***************The result is *****************');
-        log.info(result);
-        return result;
+                // log.info('***************The result is *****************');
+                // log.info(result);
+                return result;
+            }
+        });
     }
 
     /**
@@ -237,24 +246,24 @@ class ServiceNowAdapter extends EventEmitter {
         let response = this.connector.post(callback);
         var result = null;
         if (response && response !== null && typeof (response === 'object') && ('body' in response)) {
-            
+
             result = response.body.result;
-            
+
             for (var key in result) {
-                    if (result.hasOwnProperty(key)) {
-                        if (key === 'number'){
-                            result.change_ticket_number = result.number;
-                            delete result[j].number;
-                        }else if(key === 'sys_id'){
-                            result.change_ticket_key = result.sys_id;
-                            delete result.sys_id;
-                        }else if( key === 'active' || key === 'priority' || key === 'description' || key === 'work_start' || key === 'work_end') {
-                            continue;
-                        } else {
-                            delete result[key];
-                        }
+                if (result.hasOwnProperty(key)) {
+                    if (key === 'number') {
+                        result.change_ticket_number = result.number;
+                        delete result[j].number;
+                    } else if (key === 'sys_id') {
+                        result.change_ticket_key = result.sys_id;
+                        delete result.sys_id;
+                    } else if (key === 'active' || key === 'priority' || key === 'description' || key === 'work_start' || key === 'work_end') {
+                        continue;
+                    } else {
+                        delete result[key];
                     }
                 }
+            }
         }
         return result;
     }
