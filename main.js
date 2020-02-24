@@ -190,15 +190,20 @@ class ServiceNowAdapter extends EventEmitter {
 
             if (!error) {
 
-                // log.info('2***************The response is *****************');
-                // log.info(response);
+                //  log.info('2***************No error*****************');
+                //  log.info('3*********** '+(typeof (response === 'object')));
+                //  log.info('4***********' +('body' in response));
+                //  log.info(response.body);
                 var result = null;
                 if (response && response !== null && typeof (response === 'object') && ('body' in response)) {
 
-                    result = response.body.result;
-
+                    var body  = JSON.parse(response.body);
+                    // log.info('5***********' + JSON.stringify(body));
+                    result = body.result;
+                    // log.info('6***********' + result);
+                    log.info('7***********' + JSON.stringify(result));
                     if (result != null) {
-                                log.info('1***************The result is *****************');
+                                log.info('1***************The result length is *****************');
                                 log.info(result.length);
                         for (var j = 0; j < result.length; j++) {
                             for (var key in result[j]) {
@@ -218,10 +223,11 @@ class ServiceNowAdapter extends EventEmitter {
                             }
                         }
                     }
+
                 }
 
-                // log.info('***************The result is *****************');
-                // log.info(result);
+                 log.info('8***************The result returned is *****************');
+                 log.info(JSON.stringify(result));
                 return result;
             }
         });
