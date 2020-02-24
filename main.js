@@ -199,14 +199,14 @@ class ServiceNowAdapter extends EventEmitter {
                 var result = null;
                 if (response && response !== null && typeof (response === 'object') && ('body' in response)) {
 
-                    var body  = JSON.parse(response.body);
+                    var body = JSON.parse(response.body);
                     // log.info('5***********' + JSON.stringify(body));
                     result = body.result;
                     // log.info('6***********' + result);
                     // log.info('7***********' + JSON.stringify(result));
                     if (result != null) {
-                                // log.info('1***************The result length is *****************');
-                                // log.info(result.length);
+                        // log.info('1***************The result length is *****************');
+                        // log.info(result.length);
                         for (var j = 0; j < result.length; j++) {
                             for (var key in result[j]) {
                                 if (result[j].hasOwnProperty(key)) {
@@ -228,9 +228,9 @@ class ServiceNowAdapter extends EventEmitter {
 
                 }
 
-                 log.info('8***************The result returned is *****************');
-                 log.info(JSON.stringify(result));
-                 callBackData = result;
+                log.info('8***************The result returned is *****************');
+                log.info(JSON.stringify(result));
+                callBackData = result;
             }
             callback(callBackData, callbackError);
         });
@@ -252,29 +252,66 @@ class ServiceNowAdapter extends EventEmitter {
          * Note how the object was instantiated in the constructor().
          * post() takes a callback function.
          */
-        let response = this.connector.post(callback);
-        var result = null;
-        if (response && response !== null && typeof (response === 'object') && ('body' in response)) {
+        // let response = this.connector.post(callback);
+        // var result = null;
+        // if (response && response !== null && typeof (response === 'object') && ('body' in response)) {
 
-            result = response.body.result;
+        //     result = response.body.result;
 
-            for (var key in result) {
-                if (result.hasOwnProperty(key)) {
-                    if (key === 'number') {
-                        result.change_ticket_number = result.number;
-                        delete result[j].number;
-                    } else if (key === 'sys_id') {
-                        result.change_ticket_key = result.sys_id;
-                        delete result.sys_id;
-                    } else if (key === 'active' || key === 'priority' || key === 'description' || key === 'work_start' || key === 'work_end') {
-                        continue;
-                    } else {
-                        delete result[key];
+        //     for (var key in result) {
+        //         if (result.hasOwnProperty(key)) {
+        //             if (key === 'number') {
+        //                 result.change_ticket_number = result.number;
+        //                 delete result[j].number;
+        //             } else if (key === 'sys_id') {
+        //                 result.change_ticket_key = result.sys_id;
+        //                 delete result.sys_id;
+        //             } else if (key === 'active' || key === 'priority' || key === 'description' || key === 'work_start' || key === 'work_end') {
+        //                 continue;
+        //             } else {
+        //                 delete result[key];
+        //             }
+        //         }
+        //     }
+        // }
+        // return result;
+
+        this.connector.post((response, error) => {
+            let callBackError = error;
+            let callBackData = response;
+
+            if (!error) {
+                var result = null;
+                if (response && response !== null && typeof (response === 'object') && ('body' in response)) {
+
+                    var body = JSON.parse(response.body);
+                    result = body.result;
+
+                    if (result != null) {
+                        for (var key in result) {
+                            if (result.hasOwnProperty(key)) {
+                                if (key === 'number') {
+                                    result.change_ticket_number = result.number;
+                                    delete result[j].number;
+                                } else if (key === 'sys_id') {
+                                    result.change_ticket_key = result.sys_id;
+                                    delete result.sys_id;
+                                } else if (key === 'active' || key === 'priority' || key === 'description' || key === 'work_start' || key === 'work_end') {
+                                    continue;
+                                } else {
+                                    delete result[key];
+                                }
+                            }
+                        }
                     }
                 }
+                 log.info('9***************The post result returned is *****************');
+                 log.info(JSON.stringify(result));
+                callBackData = result;
             }
-        }
-        return result;
+            callback(callBackData, callbackError);
+        });
+
     }
 }
 
